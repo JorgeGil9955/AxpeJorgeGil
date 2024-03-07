@@ -14,3 +14,4 @@ Arquitectura usada: MVVM
  - Coil
  - Retrofit
  - Gson
+ - Google Maps Static API
