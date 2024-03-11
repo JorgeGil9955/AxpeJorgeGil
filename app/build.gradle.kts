@@ -87,7 +87,9 @@ dependencies {
 
     //Dagger hilt
     implementation("com.google.dagger:hilt-android:2.50")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.50")
     kapt("com.google.dagger:hilt-android-compiler:2.50")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.50")
 
     //Paging
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")

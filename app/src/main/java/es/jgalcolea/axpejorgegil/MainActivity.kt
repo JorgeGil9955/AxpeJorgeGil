@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import es.jgalcolea.axpejorgegil.ui.ContactNavigation
 import es.jgalcolea.axpejorgegil.ui.screens.ContactDetail
 import es.jgalcolea.axpejorgegil.ui.screens.ContactList
 import es.jgalcolea.axpejorgegil.ui.theme.AxpeJorgeGilTheme
@@ -29,12 +30,8 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) {
-                    val navController = rememberNavController()
                     val mViewModel: SharedContactViewModel by viewModels()
-                    NavHost(navController = navController, startDestination = "ContactList") {
-                        composable("ContactList") { ContactList(navController = navController, viewModel = mViewModel) }
-                        composable("ContactDetail") { ContactDetail(navController = navController, viewModel = mViewModel) }
-                    }
+                    ContactNavigation(sharedViewModel = mViewModel)
                 }
             }
         }

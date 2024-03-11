@@ -19,14 +19,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.filter
 import es.jgalcolea.axpejorgegil.model.entities.Contact
 import es.jgalcolea.axpejorgegil.ui.components.ContactRow
 import es.jgalcolea.axpejorgegil.viewmodel.SharedContactViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,15 +38,20 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
     var searchQuery by remember { mutableStateOf("") }
     var isSearching by remember { mutableStateOf(false) }
 
-    val filteredContactFlow = combine(
-        viewModel.contact,
-        flowOf(searchQuery)
-    ) { pagingData, query ->
-        pagingData.filter {
-            it.name.contains(query, ignoreCase = true) || it.email.contains(query, ignoreCase = true)
+    val contactFlow = if (isSearching) {
+        combine(
+            viewModel.contact,
+            flowOf(searchQuery)
+        ) { pagingData, query ->
+            pagingData.filter {
+                it.name.contains(query, ignoreCase = true) || it.email.contains(query, ignoreCase = true)
+            }
         }
+    } else {
+        viewModel.contact
     }
-    val contactList: LazyPagingItems<Contact> = filteredContactFlow.collectAsLazyPagingItems()
+    val contactList: LazyPagingItems<Contact> = contactFlow.collectAsLazyPagingItems()
+
     Scaffold (
         topBar = {
             if (!isSearching) {
@@ -56,7 +65,7 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
                         IconButton(onClick = { isSearching = true }) {
                             Icon(
                                 imageVector = Icons.Outlined.Search,
-                                contentDescription = "Buscar"
+                                contentDescription = "Buscar",
                             )
                         }
                     }
@@ -66,7 +75,8 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
                     title = {
                         TextField(
                             value = searchQuery,
-                            onValueChange = {searchQuery = it}
+                            onValueChange = {searchQuery = it},
+                            placeholder = { Text(text = "Buscar...") }
                         )
                     },
                     navigationIcon = {

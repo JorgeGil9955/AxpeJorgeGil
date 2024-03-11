@@ -27,12 +27,13 @@ class ContactRepository @Inject constructor(private val contactService: ContactS
         }
     }
 
-    private suspend fun fetchContacts(page: Int): List<Contact> {
+    @Throws(Exception::class)
+    private suspend fun fetchContacts(page: Int): List<Contact>{
         val contactList = mutableListOf<Contact>()
         val contactResponse = contactService.getContacts(page)
         if (!contactResponse.isSuccessful ||
             contactResponse.body() == null ||
-            contactResponse.body()!!.size() == 0) return contactList
+            contactResponse.body()!!.size() == 0) throw Exception("No se pudieron cargar los contactos")
         val jsonList = contactResponse.body()!!.getAsJsonArray("results")
         jsonList.forEach { contactObject ->
             contactList.add(parse(contactObject.asJsonObject))
