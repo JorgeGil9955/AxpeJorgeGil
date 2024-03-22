@@ -15,3 +15,4 @@ Arquitectura usada: MVVM
  - Retrofit
  - Gson
  - Google Maps Static API
+ - Mockito
