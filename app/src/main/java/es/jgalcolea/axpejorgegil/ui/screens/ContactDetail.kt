@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import es.jgalcolea.axpejorgegil.ui.components.InfoMapRow
 import es.jgalcolea.axpejorgegil.ui.components.InfoRow
@@ -41,7 +42,8 @@ fun ContactDetail(navController: NavController, viewModel: SharedContactViewMode
                             contentDescription = "Volver"
                         )
                     }
-                }
+                },
+                modifier = Modifier.testTag("contactDetailTopBar")
             )
         }
     ) { innerPadding ->

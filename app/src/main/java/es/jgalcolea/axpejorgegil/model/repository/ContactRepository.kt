@@ -28,7 +28,7 @@ class ContactRepository @Inject constructor(private val contactService: ContactS
     }
 
     @Throws(Exception::class)
-    private suspend fun fetchContacts(page: Int): List<Contact>{
+    private suspend fun fetchContacts(page: Int): List<Contact> {
         val contactList = mutableListOf<Contact>()
         val contactResponse = contactService.getContacts(page)
         if (!contactResponse.isSuccessful ||

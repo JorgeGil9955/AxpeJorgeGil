@@ -18,19 +18,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
-import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.filter
 import es.jgalcolea.axpejorgegil.model.entities.Contact
 import es.jgalcolea.axpejorgegil.ui.components.ContactRow
 import es.jgalcolea.axpejorgegil.viewmodel.SharedContactViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,9 +35,9 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
     var searchQuery by remember { mutableStateOf("") }
     var isSearching by remember { mutableStateOf(false) }
 
-    val contactFlow = if (isSearching) {
+    val contactCombineFlow = if (isSearching) {
         combine(
-            viewModel.contact,
+            viewModel.contactFlow,
             flowOf(searchQuery)
         ) { pagingData, query ->
             pagingData.filter {
@@ -48,9 +45,9 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
             }
         }
     } else {
-        viewModel.contact
+        viewModel.contactFlow
     }
-    val contactList: LazyPagingItems<Contact> = contactFlow.collectAsLazyPagingItems()
+    val contactList: LazyPagingItems<Contact> = contactCombineFlow.collectAsLazyPagingItems()
 
     Scaffold (
         topBar = {
@@ -62,7 +59,10 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
                         )
                     },
                     actions = {
-                        IconButton(onClick = { isSearching = true }) {
+                        IconButton(
+                            onClick = { isSearching = true },
+                            modifier = Modifier.testTag("buscar")
+                        ) {
                             Icon(
                                 imageVector = Icons.Outlined.Search,
                                 contentDescription = "Buscar",
@@ -80,10 +80,13 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
                         )
                     },
                     navigationIcon = {
-                        IconButton(onClick = {
+                        IconButton(
+                            onClick = {
                             searchQuery = ""
                             isSearching = false
-                        }) {
+                            },
+                            modifier = Modifier.testTag("cancelar")
+                        ) {
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
                                 contentDescription = "Cancelar"
@@ -94,7 +97,7 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
             }
         }
     ) { innerPadding ->
-        LazyColumn (modifier = Modifier.padding(innerPadding)) {
+        LazyColumn (modifier = Modifier.padding(innerPadding).testTag("contactLazyColumn")) {
             items(
                 count = contactList.itemCount
             ) { index ->

@@ -1,6 +1,7 @@
 package es.jgalcolea.axpejorgegil.ui
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -9,7 +10,7 @@ import es.jgalcolea.axpejorgegil.ui.screens.ContactList
 import es.jgalcolea.axpejorgegil.viewmodel.SharedContactViewModel
 
 @Composable
-fun ContactNavigation(sharedViewModel: SharedContactViewModel) {
+fun ContactNavigation(sharedViewModel: SharedContactViewModel = hiltViewModel()) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "ContactList") {
         composable("ContactList") { ContactList(navController = navController, viewModel = sharedViewModel) }

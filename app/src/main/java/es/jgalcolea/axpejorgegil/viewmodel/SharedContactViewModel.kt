@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SharedContactViewModel @Inject constructor(private val contactRepository: ContactRepository): ViewModel() {
-    val contact: Flow<PagingData<Contact>> = Pager(PagingConfig(pageSize = 20)) {
+    val contactFlow: Flow<PagingData<Contact>> = Pager(PagingConfig(pageSize = 20)) {
         contactRepository
     }.flow.cachedIn(viewModelScope)
 
