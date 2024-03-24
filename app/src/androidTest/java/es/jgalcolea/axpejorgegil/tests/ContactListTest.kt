@@ -44,9 +44,9 @@ class ContactListTest {
         composeTestRule.onNodeWithText("Contactos").assertIsDisplayed()
 
         //Click search icon and back button
-        composeTestRule.onNodeWithTag("buscar").performClick()
-        composeTestRule.onNodeWithText("Buscar...").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("cancelar").performClick()
+        composeTestRule.onNodeWithTag("searchButton").performClick()
+        composeTestRule.onNodeWithTag("searchInputField").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("cancelSearchButton").performClick()
 
         //Check if we are back to initial state
         composeTestRule.onNodeWithText("Contactos").assertIsDisplayed()
@@ -68,8 +68,8 @@ class ContactListTest {
         composeTestRule.onNodeWithText("Cecilie Kristensen").assertIsDisplayed()
 
         //Click search icon and search for contact Eugenie Frost
-        composeTestRule.onNodeWithTag("buscar").performClick()
-        composeTestRule.onNodeWithText("Buscar...").performTextInput("Eugenie")
+        composeTestRule.onNodeWithTag("searchButton").performClick()
+        composeTestRule.onNodeWithTag("searchInputField").performTextInput("Eugenie")
         composeTestRule.onNodeWithText("Eugenie Frost").assertIsDisplayed()
 
     }

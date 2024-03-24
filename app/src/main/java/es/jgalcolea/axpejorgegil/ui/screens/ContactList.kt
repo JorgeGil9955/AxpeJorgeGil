@@ -61,7 +61,7 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
                     actions = {
                         IconButton(
                             onClick = { isSearching = true },
-                            modifier = Modifier.testTag("buscar")
+                            modifier = Modifier.testTag("searchButton")
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.Search,
@@ -76,7 +76,8 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
                         TextField(
                             value = searchQuery,
                             onValueChange = {searchQuery = it},
-                            placeholder = { Text(text = "Buscar...") }
+                            placeholder = { Text(text = "Buscar...") },
+                            modifier = Modifier.testTag("searchInputField")
                         )
                     },
                     navigationIcon = {
@@ -85,7 +86,7 @@ fun ContactList(navController: NavController, viewModel: SharedContactViewModel)
                             searchQuery = ""
                             isSearching = false
                             },
-                            modifier = Modifier.testTag("cancelar")
+                            modifier = Modifier.testTag("cancelSearchButton")
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
